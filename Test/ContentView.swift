@@ -7,116 +7,72 @@
 
 import SwiftUI
 
-
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        let scanner = Scanner(string: hex)
-        
-        if hex.hasPrefix("#") {
-            scanner.currentIndex = hex.index(after: hex.startIndex)
-        }
-
-        var rgb: UInt64 = 0
-        scanner.scanHexInt64(&rgb)
-
-        let r = Double((rgb >> 16) & 0xFF) / 255
-        let g = Double((rgb >> 8) & 0xFF) / 255
-        let b = Double(rgb & 0xFF) / 255
-
-        self.init(red: r, green: g, blue: b)
-    }
-}
-
-
-struct ContentView: View {
+struct MenuView: View {
     
-    @State var n  = 0
+    var menuItems: [MenuItem] = [
+        
+        MenuItem(name: "Onigiri", price: "1.99", imageName: "onigiri"),
+        MenuItem(name: "Meguro Sushi", price: "5.99", imageName:"meguro-sushi"),
+        MenuItem(name: "Tako Sushi", price: "4.99", imageName: "tako-sushi"),
+        MenuItem(name: "Avocado Maki", price: "2.99", imageName: "avocado-maki"),
+        MenuItem(name: "Tobiko Spicy Maki", price: "4.99", imageName: "tobiko-spicy-maki"),
+        MenuItem(name: "Salmon Sushi", price: "4.99", imageName: "salmon-sushi"),
+        MenuItem(name: "Hamachi Sushi", price: "6.99", imageName: "hamachi-sushi"),
+        MenuItem(name: "Kani Sushi", price: "3.99", imageName: "kani-sushi"),
+        MenuItem(name: "Tamago Sushi", price: "3.99", imageName: "tamago-sushi"),
+        MenuItem(name: "California Roll", price: "3.99", imageName: "california-roll"),
+        MenuItem(name: "Shrimp Sushi", price: "3.99", imageName: "shrimp-sushi"),
+        MenuItem(name: "Ikura Sushi", price: "5.99", imageName: "ikura-sushi" )
+        
+    ]
+    
+    
     
     var body: some View {
         
         
-        ZStack{
+        List(menuItems){ item in
             
-            Color(hex: "FFC200")
-                .ignoresSafeArea()
+            
+            // Horizontal stack
+            HStack{
 
-            
-            VStack(
-                alignment: .leading,
-                spacing: 10
-            ) {
-                
-                Image("naut")
+                // Image
+                Image(item.imageName)
                     .resizable()
-                    .cornerRadius(20)
                     .aspectRatio(contentMode: .fit)
+                    .frame(height: 60)
+                    .cornerRadius(20)
+                    .padding(.trailing)
                 
                 
-                Text("Astronaut")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                    .multilineTextAlignment(.leading)
-                    .padding(.leading)
+                // Title (name)
+                Text(item.name)
+                    .font(.title2)
                 
                 
-                Text("I am stuck here. Please help")
+                // Spacer
+                Spacer()
+                
+                
+                // Price on the right
+                Text("$" + item.price)
                     .font(.title3)
-                    .foregroundColor(.black)
-                    .padding(.leading)
                 
                 
-                VStack{
-                    
-                    HStack{
-                        
-                        Spacer()
-                        
-                        Text("\(n) Persons Donated")
-                            .font(.title3)
-                            .foregroundColor(.blue)
-                            .padding(.trailing)
-                        
-                    }
-                    .padding(.top)
-                    
-                    HStack{
-                        
-                        Spacer()
-                        
-                        Button {
-                            n += 1
-                            print(n)
-                        }
-                        label: {
-                            Text("Donate")
-                        }
-                        .padding(.trailing)
-                        .foregroundColor(.orange)
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        
-                    }
-                }
-                
-                
-
             }
-            .padding(20)
-            .background(.white)
-            .cornerRadius(20)
-            .shadow(radius: 20)
-            .padding(.horizontal, 20)
-            
+            .listRowSeparator(.hidden)
+            .listRowBackground(
+                Color(.brown)
+                    .opacity(0.1)
+            )
             
         }
-        
-        
-    }
+        .listStyle(.plain)
     
+    }
 }
 
 #Preview {
-    ContentView()
+    MenuView()
 }
