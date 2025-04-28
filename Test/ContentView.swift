@@ -1,42 +1,41 @@
-/*
-
- Build a UI with a List and a Button below it.
-
- Declare a property that contains an array of 5 strings. These can be any 5 words you want.
- 
- Each time the button is tapped, choose a random word from the array and put it in the list.
-
- The number of items in the list should grow as you tap the button.
- 
-*/
-
 
 
 import SwiftUI
 
-struct MenuView: View {
+struct ContentView: View {
     
-    @State var items: [Int] = []
     
     var body: some View {
         
-        List(items, id: \.self) { item in
+        ZStack {
             
-            Text("\(item)")
             
-        }
-        
-        Button{
+            Image("toronto")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .cornerRadius(10)
+                .padding(20)
+                .border(.blue, width: 2)
             
-            items.append(items.count + 1)
             
-        } label: {
-            Text("Add")
+            VStack {
+                
+                Text("CN Tower")
+                    .font(.largeTitle)
+                
+                Text("Toronto")
+                    .font(.headline)
+                
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(.black.opacity(0.85))
+            
         }
         
     }
 }
 
 #Preview {
-    MenuView()
+    ContentView()
 }
