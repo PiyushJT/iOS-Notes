@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "london.jpg",
+      "filename" : "cherry.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "cherry@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "cherry@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
