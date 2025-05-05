@@ -4,122 +4,109 @@ import SwiftUI
 
 struct ContentView: View {
     
-    
-    @State var credits: Int = 0;
-    
-    @State var images: [String] = ["apple", "cherry", "star"];
-    
+
+    @State var score = 0
+    @State var attempt = 0
+
     
     var body: some View {
         
         VStack {
             
-            Text("The Luck Game!")
+            Text("The Guess Game!")
                 .font(.largeTitle)
                 .fontWeight(.bold)
+                .padding(.bottom, 20)
             
-            
-            Spacer()
-            
-            
-            Text("Credits: " + String(credits))
+            Text("Attempts left : \(5-attempt)")
                 .font(.title)
-            
+    
             
             Spacer()
             
             HStack {
+                Spacer()
                 
-                Image(images[0])
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                                
-                Image(images[1])
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
                 
-                Image(images[2])
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+                Button {
+                    checkAnswer(answer: 0)
+                }
+                label: {
+                    Image("cat")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .padding(15)
+                        .background(.primary)
+                        .cornerRadius(10)
+                }
                 
+                
+                Spacer()
+                
+                
+                Button {
+                    checkAnswer(answer: 1)
+                }
+                label: {
+                    Image("dog")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .padding(15)
+                        .background(.primary)
+                        .cornerRadius(10)
+                }
+                
+                
+                Spacer()
+                
+                
+                Button {
+                    checkAnswer(answer: 2)
+                }
+                label: {
+                    Image("fox")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .padding(15)
+                        .background(.primary)
+                        .cornerRadius(10)
+                }
+                
+                
+                Spacer()
+            
             }
-            .padding()
             
             Spacer()
             
-            
-            Button(action: {
-                
-                
-                for i in 0..<3 {
-                    
-                    let imgNo = Int.random(in: 1...3)
-                    
-                    switch imgNo {
-                    case 1 :
-                        images[i] = "apple"
-                    case 2 :
-                        images[i] = "cherry"
-                    default :
-                        images[i] = "star"
-                    }
-                    
-                }
-                
-                if(images[0] == images[1]) {
-                    
-                    if(images[0] == images[2]) {
-                        credits += 100
-                    }
-                    else {
-                        credits += 50
-                    }
-                    
-                }
-                
-                else if(images[1] == images[2]) {
-                    
-                    if(images[1] == images[0]) {
-                        credits += 100
-                    }
-                    else {
-                        credits += 50
-                    }
-                    
-                }
-                
-                else if(images[2] == images[0]) {
-                    
-                    if(images[2] == images[1]) {
-                        credits += 100
-                    }
-                    else {
-                        credits += 50
-                    }
-                    
-                }
-                
-                
-            }, label: {
-                
-                Text("Spin")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.horizontal, 30)
-                    .padding(.vertical, 10)
-                    .background(Color.blue)
-                    .foregroundStyle(.white)
-                    .cornerRadius(30)
-                
-                
-            })
-            
-            Spacer()
-            
+            Text("Score: " + String(score))
+                .font(.title)
+                .padding(.bottom, 100)
             
         }
         
     }
+    
+    func checkAnswer(answer: Int) {
+        
+        
+        if(attempt < 5){
+            
+            let rand = Int.random(in: 0...2)
+            
+            if(rand == answer){
+                score += 1
+            }
+            
+            attempt += 1
+        }
+        else {
+            attempt = 0;
+            score = 0;
+        }
+            
+    }
+    
 }
 
 #Preview {
