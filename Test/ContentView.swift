@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 
 struct ContentView: View {
@@ -26,52 +24,16 @@ struct ContentView: View {
             
             HStack {
                 Spacer()
-                
-                
-                Button {
-                    checkAnswer(answer: 0)
-                }
-                label: {
-                    Image("cat")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                        .padding(15)
-                        .background(.primary)
-                        .cornerRadius(10)
-                }
-                
+            
+                ButtonView(score: $score, attempt: $attempt, imageNo: 0)
                 
                 Spacer()
                 
-                
-                Button {
-                    checkAnswer(answer: 1)
-                }
-                label: {
-                    Image("dog")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                        .padding(15)
-                        .background(.primary)
-                        .cornerRadius(10)
-                }
-                
+                ButtonView(score: $score, attempt: $attempt, imageNo: 1)
                 
                 Spacer()
                 
-                
-                Button {
-                    checkAnswer(answer: 2)
-                }
-                label: {
-                    Image("fox")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                        .padding(15)
-                        .background(.primary)
-                        .cornerRadius(10)
-                }
-                
+                ButtonView(score: $score, attempt: $attempt, imageNo: 2)
                 
                 Spacer()
             
@@ -87,27 +49,70 @@ struct ContentView: View {
         
     }
     
-    func checkAnswer(answer: Int) {
+    
+    
+    struct ButtonView: View {
         
+        @Binding var score: Int
+        @Binding var attempt: Int
+        var imageNo: Int
         
-        if(attempt < 5){
+        var body: some View {
             
-            let rand = Int.random(in: 0...2)
             
-            if(rand == answer){
-                score += 1
+            let image = switch imageNo {
+                
+            case 0:
+                "cat"
+            case 1:
+                "dog"
+            default:
+                "fox"
+                
             }
             
-            attempt += 1
-        }
-        else {
-            attempt = 0;
-            score = 0;
-        }
             
+            Button(
+                action: {
+                    checkAnswer(answer: imageNo)
+                },
+                
+                label: {
+                    Image(image)
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .padding(15)
+                        .background(.lime)
+                        .cornerRadius(10)
+                }
+            )
+
+        }
+        
+        
+        func checkAnswer(answer: Int) {
+            
+            if(attempt < 5){
+                
+                let rand = Int.random(in: 0...2)
+                
+                if(rand == answer){
+                    score += 1
+                }
+                
+                attempt += 1
+            }
+            else {
+                attempt = 0;
+                score = 0;
+            }
+                
+        }
+        
     }
-    
+
 }
+
 
 #Preview {
     ContentView()
