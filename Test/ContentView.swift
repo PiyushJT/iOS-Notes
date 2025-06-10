@@ -3,115 +3,232 @@ import SwiftUI
 struct ContentView: View {
     
 
-    @State var score = 0
-    @State var attempt = 0
-
     
     var body: some View {
-        
-        VStack {
+        VStack{
             
-            Text("The Guess Game!")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.bottom, 20)
+            headNavigator()
             
-            Text("Attempts left : \(5-attempt)")
-                .font(.title)
-    
+            profileStatsTop()
             
-            Spacer()
+            profileStatsBio()
             
-            HStack {
-                Spacer()
+            buttons()
             
-                ButtonView(score: $score, attempt: $attempt, imageNo: 0)
-                
-                Spacer()
-                
-                ButtonView(score: $score, attempt: $attempt, imageNo: 1)
-                
-                Spacer()
-                
-                ButtonView(score: $score, attempt: $attempt, imageNo: 2)
-                
-                Spacer()
-            
-            }
+            Posts()
             
             Spacer()
             
-            Text("Score: " + String(score))
-                .font(.title)
-                .padding(.bottom, 100)
             
         }
-        
-    }
-    
-    
-    
-    struct ButtonView: View {
-        
-        @Binding var score: Int
-        @Binding var attempt: Int
-        var imageNo: Int
-        
-        var body: some View {
-            
-            
-            let image = switch imageNo {
-                
-            case 0:
-                "cat"
-            case 1:
-                "dog"
-            default:
-                "fox"
-                
-            }
-            
-            
-            Button(
-                action: {
-                    checkAnswer(answer: imageNo)
-                },
-                
-                label: {
-                    Image(image)
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                        .padding(15)
-                        .background(.lime)
-                        .cornerRadius(10)
-                }
-            )
-
-        }
-        
-        
-        func checkAnswer(answer: Int) {
-            
-            if(attempt < 5){
-                
-                let rand = Int.random(in: 0...2)
-                
-                if(rand == answer){
-                    score += 1
-                }
-                
-                attempt += 1
-            }
-            else {
-                attempt = 0;
-                score = 0;
-            }
-                
-        }
-        
     }
 
 }
+
+struct headNavigator: View {
+    var body: some View {
+        
+        HStack{
+            
+            
+            HStack{
+                Image(systemName: "arrow.backward")
+                
+                
+                Text("Piyush_JT__")
+                    .padding(.leading)
+            
+            }
+            
+            Spacer()
+            
+            Image(systemName: "ellipsis")
+                .rotationEffect(Angle(degrees: 90))
+            
+        }
+        .padding()
+        .font(.headline)
+        
+    }
+}
+
+
+struct profileStatsTop: View {
+    var body: some View {
+        
+        HStack{
+            
+            Image("profile")
+                .resizable()
+                .frame(width: 80, height: 80)
+                .clipShape(Circle())
+            
+            Spacer()
+            
+            VStack{
+                Text("4")
+                    .font(.title2)
+                Text("Posts")
+            }
+            Spacer()
+            
+            VStack{
+                Text("20M")
+                    .font(.title2)
+                Text("Followers")
+            }
+            Spacer()
+            
+            VStack{
+                Text("69")
+                    .font(.title2)
+                Text("Following")
+            }
+            
+        }
+        .padding(.top)
+        .padding(.horizontal)
+        
+    }
+}
+
+struct profileStatsBio: View {
+    
+    var body: some View {
+        
+        HStack{
+            VStack (alignment: .leading) {
+                
+                Text("Piyush Thummar")
+                    .fontWeight(.bold)
+                
+                Text("૩૦-૭")
+                Text("Patel 🕉️")
+                Text("App Dev.")
+                
+                Text("See Translation")
+                    .fontWeight(.bold)
+
+                HStack{
+                    
+                    Image(systemName: "link")
+                    
+                    Text("play.googl.com/store/apps/details?id=com.piyus")
+                    
+                }
+                .foregroundColor(.blue)
+                .font(.subheadline)
+                
+            }
+            .padding()
+         
+            Spacer()
+        }
+        
+    }
+}
+
+
+struct buttons : View {
+    
+    var body: some View {
+        
+        HStack{
+            
+            Button(action: {}) {
+                Text("Follow")
+                    .frame(maxWidth: .infinity, maxHeight: 5)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+            
+            Spacer()
+            
+            Button(action: {}) {
+                Text("Message")
+                    .frame(maxWidth: .infinity, maxHeight: 5)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(10)
+            }
+            
+        }
+        .padding(.horizontal)
+        
+    }
+    
+}
+
+
+struct Posts : View {
+    
+    var body: some View {
+        
+        
+        VStack {
+            
+            HStack{
+                
+                Spacer()
+                
+                VStack{
+                    
+                    Image(systemName: "rectangle.grid.3x3.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    
+                    Rectangle()
+                        .frame(width: 50, height: 3)
+                    
+                }
+                
+                Spacer()
+                Spacer()
+                
+                VStack{
+                    
+                    Image(systemName: "person.crop.square")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    
+                }
+                
+                Spacer()
+                
+            }
+        }
+        .padding(.top)
+        .padding(.horizontal)
+        
+        
+        let columns = [
+                GridItem(.flexible()),
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ]
+        
+        let imageNames = ["photo1", "photo2", "photo3", "photo4"]
+
+        
+        LazyVGrid(columns: columns, spacing: 10) {
+            
+            ForEach(imageNames, id: \.self) { imageName in
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(1, contentMode: .fill)
+                    .cornerRadius(8)
+            }
+            
+        }
+        .padding(.horizontal)
+        
+        
+    }
+}
+
 
 
 #Preview {
