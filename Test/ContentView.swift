@@ -9,9 +9,15 @@ struct ContentView: View {
     @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
-    @State private var difficulty = 1.0
+    @State private var difficulty = Difficulties.easy
 
     @State private var score = 0
+    
+    enum Difficulties: Double {
+        case easy = 1
+        case medium = 0.5
+        case hard = 0.2
+    }
     
     
     
@@ -22,18 +28,18 @@ struct ContentView: View {
             
             HStack {
                 
-                Menu("Difficulty: \(getDiff(diffF: difficulty))") {
+                Menu("Difficulty: \(difficulty)") {
                     
                     Button("Easy") {
-                        updateDiff(diff: 1)
+                        updateDiff(diff: Difficulties.easy)
                     }
                     
                     Button("Medium") {
-                        updateDiff(diff: 0.5)
+                        updateDiff(diff: Difficulties.medium)
                     }
                     
                     Button("Hard") {
-                        updateDiff(diff: 0.2)
+                        updateDiff(diff: Difficulties.hard)
                     }
                     
                 }
@@ -79,28 +85,11 @@ struct ContentView: View {
         
     }
     
-    func getDiff(diffF: Double) -> String {
-        
-        switch diffF {
-            
-        case 1:
-            return "Easy"
-        case 0.5:
-            return "Medium"
-        case 0.2:
-            return "Hard"
-        default:
-            return ""
-            
-        }
-        
-    }
-    
-    func updateDiff(diff: Double) {
+    func updateDiff(diff: Difficulties) {
         
         difficulty = diff
         
-        timer = Timer.publish(every: diff, on: .main, in: .common)
+        timer = Timer.publish(every: diff.rawValue, on: .main, in: .common)
             .autoconnect()
     }
 
