@@ -2,231 +2,108 @@ import SwiftUI
 
 struct ContentView: View {
     
+    let images = ["apple", "dog", "egg"]
+    
+    @State private var imageInd = 0
+    
+    @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
+        .autoconnect()
+    
+    @State private var difficulty = 1.0
 
+    @State private var score = 0
+    
+    
     
     var body: some View {
+        
         VStack{
             
-            headNavigator()
             
-            profileStatsTop()
-            
-            profileStatsBio()
-            
-            buttons()
-            
-            Posts()
-            
-            Spacer()
-            
-            
-        }
-    }
-
-}
-
-struct headNavigator: View {
-    var body: some View {
-        
-        HStack{
-            
-            
-            HStack{
-                Image(systemName: "arrow.backward")
+            HStack {
+                
+                Menu("Difficulty: \(getDiff(diffF: difficulty))") {
+                    
+                    Button("Easy") {
+                        updateDiff(diff: 1)
+                    }
+                    
+                    Button("Medium") {
+                        updateDiff(diff: 0.5)
+                    }
+                    
+                    Button("Hard") {
+                        updateDiff(diff: 0.2)
+                    }
+                    
+                }
+                .font(.title2)
                 
                 
-                Text("Piyush_JT__")
-                    .padding(.leading)
-            
+                Spacer()
+                
+                
+                Text("Score: \(score)")
+                    .font(.title2)
+
             }
+            .padding(.top, 100)
+            .padding(.horizontal)
+            
             
             Spacer()
             
-            Image(systemName: "ellipsis")
-                .rotationEffect(Angle(degrees: 90))
-            
-        }
-        .padding()
-        .font(.headline)
-        
-    }
-}
-
-
-struct profileStatsTop: View {
-    var body: some View {
-        
-        HStack{
-            
-            Image("profile")
+            Image(images[imageInd])
                 .resizable()
-                .frame(width: 80, height: 80)
-                .clipShape(Circle())
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 200, height: 200)
+                .shadow(radius: 3)
             
             Spacer()
-            
-            VStack{
-                Text("4")
-                    .font(.title2)
-                Text("Posts")
-            }
-            Spacer()
-            
-            VStack{
-                Text("20M")
-                    .font(.title2)
-                Text("Followers")
-            }
-            Spacer()
-            
-            VStack{
-                Text("69")
-                    .font(.title2)
-                Text("Following")
-            }
             
         }
-        .padding(.top)
-        .padding(.horizontal)
-        
+        .onReceive(timer, perform: { _ in
+            
+            changeImage()
+            
+        })
     }
-}
 
-struct profileStatsBio: View {
     
-    var body: some View {
-        
-        HStack{
-            VStack (alignment: .leading) {
-                
-                Text("Piyush Thummar")
-                    .fontWeight(.bold)
-                
-                Text("૩૦-૭")
-                Text("Patel 🕉️")
-                Text("App Dev.")
-                
-                Text("See Translation")
-                    .fontWeight(.bold)
 
-                HStack{
-                    
-                    Image(systemName: "link")
-                    
-                    Text("play.googl.com/store/apps/details?id=com.piyus")
-                    
-                }
-                .foregroundColor(.blue)
-                .font(.subheadline)
-                
-            }
-            .padding()
-         
-            Spacer()
-        }
-        
-    }
-}
-
-
-struct buttons : View {
     
-    var body: some View {
+    func changeImage() {
         
-        HStack{
-            
-            Button(action: {}) {
-                Text("Follow")
-                    .frame(maxWidth: .infinity, maxHeight: 5)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            }
-            
-            Spacer()
-            
-            Button(action: {}) {
-                Text("Message")
-                    .frame(maxWidth: .infinity, maxHeight: 5)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.gray)
-                    .cornerRadius(10)
-            }
-            
-        }
-        .padding(.horizontal)
+        // circular increment
+        imageInd = (imageInd + 1) % images.count
         
     }
     
-}
-
-
-struct Posts : View {
-    
-    var body: some View {
+    func getDiff(diffF: Double) -> String {
         
-        
-        VStack {
+        switch diffF {
             
-            HStack{
-                
-                Spacer()
-                
-                VStack{
-                    
-                    Image(systemName: "rectangle.grid.3x3.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                    
-                    Rectangle()
-                        .frame(width: 50, height: 3)
-                    
-                }
-                
-                Spacer()
-                Spacer()
-                
-                VStack{
-                    
-                    Image(systemName: "person.crop.square")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                    
-                }
-                
-                Spacer()
-                
-            }
-        }
-        .padding(.top)
-        .padding(.horizontal)
-        
-        
-        let columns = [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ]
-        
-        let imageNames = ["photo1", "photo2", "photo3", "photo4"]
-
-        
-        LazyVGrid(columns: columns, spacing: 10) {
-            
-            ForEach(imageNames, id: \.self) { imageName in
-                Image(imageName)
-                    .resizable()
-                    .aspectRatio(1, contentMode: .fill)
-                    .cornerRadius(8)
-            }
+        case 1:
+            return "Easy"
+        case 0.5:
+            return "Medium"
+        case 0.2:
+            return "Hard"
+        default:
+            return ""
             
         }
-        .padding(.horizontal)
-        
         
     }
+    
+    func updateDiff(diff: Double) {
+        
+        difficulty = diff
+        
+        timer = Timer.publish(every: diff, on: .main, in: .common)
+            .autoconnect()
+    }
+
 }
 
 
