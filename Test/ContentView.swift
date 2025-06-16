@@ -4,6 +4,12 @@ struct ContentView: View {
     
     let images = ["apple", "dog", "egg"]
     
+    enum Difficulties: Double {
+        case easy = 1
+        case medium = 0.5
+        case hard = 0.2
+    }
+    
     @State private var imageInd = 0
     
     @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
@@ -13,13 +19,9 @@ struct ContentView: View {
 
     @State private var score = 0
     
-    enum Difficulties: Double {
-        case easy = 1
-        case medium = 0.5
-        case hard = 0.2
-    }
+    @State private var imgToTap = Int.random(in: 0...2)
     
-    
+    @State private var isGameOver = false
     
     var body: some View {
         
@@ -53,9 +55,21 @@ struct ContentView: View {
                     .font(.title2)
 
             }
-            .padding(.top, 100)
+            .padding(.top, 50)
             .padding(.horizontal)
             
+            
+            Spacer()
+            
+            
+            if (isGameOver) {
+                Text("Game over with score \(score)")
+                    .font(.title)
+            }
+            else {
+                Text("Tap on \(images[imgToTap].capitalized)")
+                    .font(.title)
+            }
             
             Spacer()
             
@@ -64,8 +78,20 @@ struct ContentView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 200, height: 200)
                 .shadow(radius: 3)
+                .onTapGesture {
+                    checkResult(imgInd: imageInd)
+                }
             
             Spacer()
+            
+            Button {
+                reset()
+            } label: {
+                
+                Text("Reset Game")
+                
+            }
+
             
         }
         .onReceive(timer, perform: { _ in
@@ -89,8 +115,34 @@ struct ContentView: View {
         
         difficulty = diff
         
-        timer = Timer.publish(every: diff.rawValue, on: .main, in: .common)
+        reset()
+        
+    }
+    
+    func checkResult(imgInd: Int) {
+        
+        if (imgInd == imgToTap) {
+            score += 1
+        }
+        else {
+            
+            isGameOver = true
+            timer.upstream.connect().cancel()
+            
+        }
+        
+    }
+    
+    func reset() {
+        
+        score = 0
+        imageInd = 0
+        imgToTap = Int.random(in: 0 ... 2)
+        isGameOver = false
+        
+        timer = Timer.publish(every: difficulty.rawValue, on: .main, in: .common)
             .autoconnect()
+        
     }
 
 }
