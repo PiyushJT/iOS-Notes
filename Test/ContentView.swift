@@ -2,149 +2,114 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let images = ["apple", "dog", "egg"]
-    
-    enum Difficulties: Double {
-        case easy = 1
-        case medium = 0.5
-        case hard = 0.2
+    var body: some View {
+        
+        GeometryReader { geometry in
+            
+            ZStack {
+                
+                Color.background
+                    .ignoresSafeArea()
+                
+                VStack {
+                    VStack{
+                        
+                        Spacer()
+                        
+                        Image("orange")
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                        
+                        Spacer()
+                        
+                        HStack (alignment: .bottom) {
+                            InsideLetter(letter: "O")
+                            InsideLetter(letter: "")
+                            InsideLetter(letter: "")
+                            InsideLetter(letter: "")
+                            InsideLetter(letter: "")
+                            InsideLetter(letter: "")
+                        }
+                        .frame(height: 30)
+                        
+                        Spacer()
+                        
+                    }
+                    .frame(width: geometry.size.width * 0.9, height: geometry.size.width * 0.9)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.gray, lineWidth: 1.5)
+                    }
+                    
+                    Text("Score: 0")
+                        .font(.title2)
+                        .foregroundStyle(Color.white)
+                        .padding(.top)
+                    
+                    HStack {
+                        
+                        LetterBox(letter: "R")
+                        LetterBox(letter: "A")
+                        LetterBox(letter: "N")
+                        LetterBox(letter: "O")
+                        LetterBox(letter: "G")
+                        LetterBox(letter: "E")
+                        
+                    }
+                    
+                }
+                
+                
+            }
+            
+        }
     }
-    
-    @State private var imageInd = 0
-    
-    @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
-        .autoconnect()
-    
-    @State private var difficulty = Difficulties.easy
 
-    @State private var score = 0
+
+
+}
+
+
+struct LetterBox: View {
     
-    @State private var imgToTap = Int.random(in: 0...2)
-    
-    @State private var isGameOver = false
+    let letter: String
     
     var body: some View {
         
-        VStack{
+        ZStack {
             
-            
-            HStack {
-                
-                Menu("Difficulty: \(difficulty)") {
-                    
-                    Button("Easy") {
-                        updateDiff(diff: Difficulties.easy)
-                    }
-                    
-                    Button("Medium") {
-                        updateDiff(diff: Difficulties.medium)
-                    }
-                    
-                    Button("Hard") {
-                        updateDiff(diff: Difficulties.hard)
-                    }
-                    
-                }
+            Text(letter)
                 .font(.title2)
-                
-                
-                Spacer()
-                
-                
-                Text("Score: \(score)")
-                    .font(.title2)
-
-            }
-            .padding(.top, 50)
-            .padding(.horizontal)
-            
-            
-            Spacer()
-            
-            
-            if (isGameOver) {
-                Text("Game over with score \(score)")
-                    .font(.title)
-            }
-            else {
-                Text("Tap on \(images[imgToTap].capitalized)")
-                    .font(.title)
-            }
-            
-            Spacer()
-            
-            Image(images[imageInd])
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 200, height: 200)
-                .shadow(radius: 3)
-                .onTapGesture {
-                    checkResult(imgInd: imageInd)
-                }
-            
-            Spacer()
-            
-            Button {
-                reset()
-            } label: {
-                
-                Text("Reset Game")
-                
-            }
-
-            
+                .fontWeight(.bold)
+                .foregroundStyle(Color.white)
+                .frame(width: 30, height: 30)
+                .background(Color.gray)
+                .clipShape(RoundedRectangle(cornerRadius: 6))
         }
-        .onReceive(timer, perform: { _ in
-            
-            changeImage()
-            
-        })
     }
+}
 
-    
 
+struct InsideLetter: View {
     
-    func changeImage() {
-        
-        // circular increment
-        imageInd = (imageInd + 1) % images.count
-        
-    }
+    var letter: String
     
-    func updateDiff(diff: Difficulties) {
+    var body: some View {
         
-        difficulty = diff
         
-        reset()
+        VStack {
         
-    }
-    
-    func checkResult(imgInd: Int) {
-        
-        if (imgInd == imgToTap) {
-            score += 1
-        }
-        else {
+            LetterBox(letter: letter)
             
-            isGameOver = true
-            timer.upstream.connect().cancel()
-            
+            Rectangle()
+                .fill(Color.white)
+                .frame(width: 30, height: 2)
+                .padding(.top, 5.0)
+        
         }
         
     }
     
-    func reset() {
-        
-        score = 0
-        imageInd = 0
-        imgToTap = Int.random(in: 0 ... 2)
-        isGameOver = false
-        
-        timer = Timer.publish(every: difficulty.rawValue, on: .main, in: .common)
-            .autoconnect()
-        
-    }
-
 }
 
 
