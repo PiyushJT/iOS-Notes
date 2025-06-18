@@ -51,7 +51,6 @@ struct ContentView: View {
                         LetterBox(letter: "R")
                         LetterBox(letter: "A")
                         LetterBox(letter: "N")
-                        LetterBox(letter: "O")
                         LetterBox(letter: "G")
                         LetterBox(letter: "E")
                         
